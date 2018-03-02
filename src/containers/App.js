@@ -44,10 +44,17 @@ class App extends Component {
     return (
       <div>
         <SimpleAppBar></SimpleAppBar>
-        <Picker value={selectedSubreddit}
+        {/* <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
-                options={[ 'listePerma', 'json' ]} />
-        <p>
+                options={[ 'listePerma', 'json' ]} /> */}
+
+        {isEmpty
+          ? (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>)
+          : <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+              <Posts posts={posts} />
+            </div>
+        }
+                {/* <p>
           {lastUpdated &&
             <span>
               Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
@@ -59,13 +66,7 @@ class App extends Component {
               Refresh
             </button>
           }
-        </p>
-        {isEmpty
-          ? (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>)
-          : <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-              <Posts posts={posts} />
-            </div>
-        }
+        </p> */}
       </div>
     )
   }

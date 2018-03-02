@@ -23,12 +23,6 @@ export const receivePosts = (subreddit, json) => ({
   posts: json,
   receivedAt: Date.now()
 });
-// export const receivePosts = (subreddit, json) => ({
-//   type: RECEIVE_POSTS,
-//   subreddit,
-//   posts: json.data.children.map(child => child.data),
-//   receivedAt: Date.now()
-// });
 
 const fetchPosts = subreddit => dispatch => {
   dispatch(requestPosts(subreddit));

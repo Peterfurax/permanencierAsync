@@ -1,20 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import MultiSelect from './multiselect'
+import React from "react";
+import PropTypes from "prop-types";
+import MultiSelect from "./multiselect";
 
-const Posts = ({posts}) => (
-  <ul>
-      <MultiSelect posts={posts}></MultiSelect>
-      <li >{posts.length}</li>
-    
-    {posts.map((post, i) =>
-      <li key={i}>{post.nomLong}</li>
-    )}
-  </ul>
-)
+const Posts = ({ posts }) => <MultiSelect posts={posts} />;
 
 Posts.propTypes = {
   posts: PropTypes.array.isRequired
-}
+};
 
-export default Posts
+export default Posts;

@@ -12,8 +12,10 @@ import ArrowDropUpIcon from "material-ui-icons/ArrowDropUp";
 import ClearIcon from "material-ui-icons/Clear";
 import Chip from "material-ui/Chip";
 import Select from "react-select";
+import Card, { CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
+
 // import Autors from './auteurs_internes'
 import "react-select/dist/react-select.css";
 // import Autors from './auteurs_internes.json'
@@ -191,18 +193,10 @@ const styles = theme => ({
 
 class IntegrationReactSelect extends React.Component {
   state = {
-    single: null,
     multi: null,
-    RedacChefWeb: null
-  };
-
-
-
-
-  handleChangeSingle = single => {
-    this.setState({
-      single
-    });
+    RedacChefWeb: null,
+    General: null,
+    Critique:null
   };
 
   handleChangeMulti = multi => {
@@ -211,19 +205,21 @@ class IntegrationReactSelect extends React.Component {
     });
   };
 
-  handleChangeRCW = name => event => {
+  handleChangeRCW = RCW => event => {
     this.setState({
-        RedacChefWeb: event.target.value,
+      RedacChefWeb: event.target.value
+    });
+  };  
+  handleChangeGeneral = General => event => {
+    this.setState({
+      General: event.target.value
     });
   };
-
-
-
-
-
-
-
-
+  handleChangeCritique = Critique => event => {
+    this.setState({
+      Critique: event.target.value
+    });
+  };
 
   render() {
     const suggestions3 = this.props.posts[2].map(suggestion => ({
@@ -239,82 +235,81 @@ class IntegrationReactSelect extends React.Component {
     console.log(suggestions3);
     console.log(this.state);
     const { classes } = this.props;
-    const { single, multi, RedacChefWeb} = this.state;
+    const { multi, RedacChefWeb } = this.state;
     // let info1 = "vide"
     return (
       <div className={classes.root}>
-        {/* <Input
-          fullWidth
-          inputComponent={SelectWrapped}
-          inputProps={{
-            classes,
-            value: single,
-            onChange: this.handleChangeSingle,
-            placeholder: 'Select single-value…',
-            instanceId: 'react-select-single',
-            id: 'react-select-single',
-            name: 'react-select-single',
-            simpleValue: true,
-            options: suggestions,
-          }}
-        /> */}
-        <Input
-          fullWidth
-          inputComponent={SelectWrapped}
-          
-          inputProps={{
-            classes,
-            value: multi,
-            multi: true,
-            onChange: this.handleChangeMulti,
-            placeholder: "Saisie permanencier",
-            instanceId: "react-select-chip",
-            id: "react-select-chip",
-            name: "react-select-chip",
-            simpleValue: true,
-            options: suggestions3
-          }}
-        />
-        <TextField
-          id="full-width"
-          label="Rédacteur en chef web du lendemain matin :"
-        //   InputLabelProps={{
-        //     shrink: true
-        //   }}
-          placeholder="information Redaction en chef Web"
-          helperText="information Redaction en chef Web"
-          fullWidth
-          margin="normal"
-          onChange={this.handleChangeRCW()}
-        />
-              <TextField
-        id="date"
-        label="Birthday"
-        type="date"
-        defaultValue="2017-05-24"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-        <TextField
-          id="full-width"
-          label="Informations Générales"
-        //   InputLabelProps={{
-        //     shrink: true
-        //   }}
-          placeholder="Informations Générales"
-          helperText="Informations Générales"
-          fullWidth
-          margin="normal"
-        />
-        <Button
-          variant="raised"
-          color="primary"
-          href={"http://localhost:4001/perma/"+multi+"/mess/"+RedacChefWeb}
-        >
-          push to api
-        </Button>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography>Parution</Typography>
+            <TextField
+              id="date"
+              type="date"
+              defaultValue="2017-05-24"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+            <p> </p>
+            <Typography>Permanencier(e.s)</Typography>
+            <Input
+              fullWidth
+              inputComponent={SelectWrapped}
+              inputProps={{
+                classes,
+                value: multi,
+                multi: true,
+                onChange: this.handleChangeMulti,
+                placeholder: "Saisie permanencier",
+                instanceId: "react-select-chip",
+                id: "react-select-chip",
+                name: "react-select-chip",
+                simpleValue: true,
+                options: suggestions3
+              }}
+            />
+            <p></p>
+            <TextField
+              id="full-width"
+              label="RC web matin :"
+              placeholder="champ libre"
+              helperText="Redaction en chef Web du matin"
+              fullWidth
+              margin="normal"
+              onChange={this.handleChangeRCW()}
+            />
+            <TextField
+              id="full-width"
+              label="Générale"
+              placeholder="champ libre"
+              helperText="Générale"
+              fullWidth
+              margin="normal"
+              onChange={this.handleChangeGeneral()}
+            />
+            <TextField
+              id="full-width"
+              label="Critique"
+              placeholder="champ libre"
+              helperText="Générales"
+              fullWidth
+              margin="normal"
+            />
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="raised"
+              color="primary"
+              fullWidth={true}
+              href={
+                "http://localhost:4001/perma/" + multi + "/mess/" + RedacChefWeb
+              }
+            >
+              push to api
+            </Button>
+          </CardActions>
+        </Card>
       </div>
     );
   }
