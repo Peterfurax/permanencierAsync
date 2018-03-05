@@ -1,10 +1,17 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
-import Picker from '../components/Picker'
-import Posts from '../components/Posts'
-import SimpleAppBar from '../components/BarApp'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import Reboot from "material-ui/Reboot";
+import {
+  selectSubreddit,
+  fetchPostsIfNeeded,
+  invalidateSubreddit
+} from "../actions";
+import Picker from "../components/Picker";
+import Posts from "../components/Posts";
+import SimpleAppBar from "../components/BarApp";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Permanence from "../components/vueFi";
 class App extends Component {
   static propTypes = {
     selectedSubreddit: PropTypes.string.isRequired,
@@ -12,83 +19,122 @@ class App extends Component {
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
     dispatch: PropTypes.func.isRequired
-  }
+  };
 
   componentDidMount() {
-    const { dispatch, selectedSubreddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedSubreddit))
+    const { dispatch, selectedSubreddit } = this.props;
+    dispatch(fetchPostsIfNeeded(selectedSubreddit));
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
-      const { dispatch, selectedSubreddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedSubreddit))
+      const { dispatch, selectedSubreddit } = nextProps;
+      dispatch(fetchPostsIfNeeded(selectedSubreddit));
     }
   }
 
   handleChange = nextSubreddit => {
-    this.props.dispatch(selectSubreddit(nextSubreddit))
-  }
+    this.props.dispatch(selectSubreddit(nextSubreddit));
+  };
 
   handleRefreshClick = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { dispatch, selectedSubreddit } = this.props
-    dispatch(invalidateSubreddit(selectedSubreddit))
-    dispatch(fetchPostsIfNeeded(selectedSubreddit))
-  }
+    const { dispatch, selectedSubreddit } = this.props;
+    dispatch(invalidateSubreddit(selectedSubreddit));
+    dispatch(fetchPostsIfNeeded(selectedSubreddit));
+  };
 
   render() {
-    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
-    const isEmpty = posts.length === 0
+    const Home = () => (
+      <div>
+        {isEmpty ? (
+          isFetching ? (
+            <h2>Loading...</h2>
+          ) : (
+            <h2>Empty.</h2>
+          )
+        ) : (
+          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+            <Permanence posts={posts} />
+          </div>
+        )}
+      </div>
+    );
+
+    const About = () => (
+      <div>
+        <Picker
+          value={selectedSubreddit}
+          onChange={this.handleChange}
+          options={["listePerma", "json"]}
+        />
+        {isEmpty ? (
+          isFetching ? (
+            <h2>Loading...</h2>
+          ) : (
+            <h2>Empty.</h2>
+          )
+        ) : (
+          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+            <Posts posts={posts} />
+          </div>
+        )}
+        <p>
+          {lastUpdated && (
+            <span>
+              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{" "}
+            </span>
+          )}
+          {!isFetching && (
+            <button onClick={this.handleRefreshClick}>Refresh</button>
+          )}
+        </p>
+      </div>
+    );
+    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props;
+    const isEmpty = posts.length === 0;
     return (
       <div>
-        <SimpleAppBar></SimpleAppBar>
-        {/* <Picker value={selectedSubreddit}
-                onChange={this.handleChange}
-                options={[ 'listePerma', 'json' ]} /> */}
+        <SimpleAppBar />
+        <Router>
+          <div>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+            </ul>
 
-        {isEmpty
-          ? (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>)
-          : <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-              <Posts posts={posts} />
-            </div>
-        }
-                {/* <p>
-          {lastUpdated &&
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>
-          }
-          {!isFetching &&
-            <button onClick={this.handleRefreshClick}>
-              Refresh
-            </button>
-          }
-        </p> */}
+            <hr />
+
+            <Route exact path="/" component={Home} />
+            <Route path="/about" component={About} />
+          </div>
+        </Router>
+        <Reboot />
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = state => {
-  const { selectedSubreddit, postsBySubreddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsBySubreddit[selectedSubreddit] || {
+  const { selectedSubreddit, postsBySubreddit } = state;
+  const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
+    selectedSubreddit
+  ] || {
     isFetching: true,
     items: []
-  }
+  };
 
   return {
     selectedSubreddit,
     posts,
     isFetching,
     lastUpdated
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);

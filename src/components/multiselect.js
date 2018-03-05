@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "material-ui/styles";
 import Typography from "material-ui/Typography";
@@ -15,12 +15,11 @@ import Select from "react-select";
 import Card, { CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
-
 // import Autors from './auteurs_internes'
 import "react-select/dist/react-select.css";
 // import Autors from './auteurs_internes.json'
 
-class Option extends React.Component {
+class Option extends Component {
   handleClick = event => {
     this.props.onSelect(this.props.option, event);
   };
@@ -193,117 +192,171 @@ const styles = theme => ({
 
 class IntegrationReactSelect extends React.Component {
   state = {
-    multi: null,
-    RedacChefWeb: null,
-    General: null,
-    Critique:null
+    datePar: null,
+    perma: null,
+    redacChefWeb: null,
+    general: null,
+    urgence: null,
+    informatique: null,
+    permanenciers: null
   };
 
-  handleChangeMulti = multi => {
+  handleChangeDatePar = datePar => event => {
+    console.log(datePar);
     this.setState({
-      multi
+      datePar: event.target.value
     });
   };
 
-  handleChangeRCW = RCW => event => {
+  handleChangePerma = perma => {
     this.setState({
-      RedacChefWeb: event.target.value
+      perma
     });
-  };  
+  };
+
+  handleChangeRedacChefWeb = RCW => event => {
+    this.setState({
+      redacChefWeb: event.target.value
+    });
+  };
   handleChangeGeneral = General => event => {
     this.setState({
-      General: event.target.value
+      general: event.target.value
     });
   };
-  handleChangeCritique = Critique => event => {
+  handleChangeUrgence = urgence => event => {
     this.setState({
-      Critique: event.target.value
+      urgence: event.target.value
+    });
+  };
+  handleChangeInformatique = informatique => event => {
+    this.setState({
+      informatique: event.target.value
     });
   };
 
   render() {
-    const suggestions3 = this.props.posts[2].map(suggestion => ({
-      value: suggestion.nomCourt,
+    console.log(this.props);
+    const permanenciers = this.props.posts[1].map(permanencier => ({
+      value: permanencier.nomCourt,
       label:
-        suggestion.nomLong +
+        permanencier.nomLong +
         " - " +
-        suggestion.portable +
+        permanencier.portable +
         " - " +
-        suggestion.fixe
+        permanencier.fixe
     }));
 
-    console.log(suggestions3);
-    console.log(this.state);
+    // console.log(permanenciers);
+
     const { classes } = this.props;
-    const { multi, RedacChefWeb } = this.state;
+    const {
+      datePar,
+      perma,
+      redacChefWeb,
+      general,
+      urgence,
+      informatique
+    } = this.state;
+    console.log(this.state);
     // let info1 = "vide"
     return (
       <div className={classes.root}>
         <Card className={classes.card}>
           <CardContent>
+            {/* date parution */}
             <Typography>Parution</Typography>
             <TextField
               id="date"
               type="date"
-              defaultValue="2017-05-24"
+              defaultValue={this.props.posts[0].datePar}
               className={classes.textField}
+              onChange={this.handleChangeDatePar()}
               InputLabelProps={{
                 shrink: true
               }}
             />
             <p> </p>
+            {/* permanencier */}
             <Typography>Permanencier(e.s)</Typography>
             <Input
               fullWidth
               inputComponent={SelectWrapped}
               inputProps={{
                 classes,
-                value: multi,
+                value: perma,
                 multi: true,
-                onChange: this.handleChangeMulti,
+                onChange: this.handleChangePerma,
                 placeholder: "Saisie permanencier",
                 instanceId: "react-select-chip",
                 id: "react-select-chip",
                 name: "react-select-chip",
                 simpleValue: true,
-                options: suggestions3
+                options: permanenciers
               }}
             />
-            <p></p>
+            <p />
+            {/* RedacChefWeb */}
             <TextField
               id="full-width"
               label="RC web matin :"
-              placeholder="champ libre"
+              defaultValue={this.props.posts[0].redacChefWeb}
               helperText="Redaction en chef Web du matin"
               fullWidth
               margin="normal"
-              onChange={this.handleChangeRCW()}
+              onChange={this.handleChangeRedacChefWeb()}
             />
+            {/* General */}
             <TextField
               id="full-width"
               label="Générale"
-              placeholder="champ libre"
+              defaultValue={this.props.posts[0].general}
               helperText="Générale"
               fullWidth
               margin="normal"
               onChange={this.handleChangeGeneral()}
             />
+            {/* Urgence */}
             <TextField
               id="full-width"
-              label="Critique"
-              placeholder="champ libre"
-              helperText="Générales"
+              label="Urgence"
+              defaultValue={this.props.posts[0].urgence}
+              helperText="Urgence"
               fullWidth
               margin="normal"
+              onChange={this.handleChangeUrgence()}
+            />
+            {/* Informatique */}
+            <TextField
+              id="full-width"
+              label="Informatique"
+              defaultValue={this.props.posts[0].informatique}
+              helperText="Urgence"
+              fullWidth
+              margin="normal"
+              onChange={this.handleChangeInformatique()}
             />
           </CardContent>
           <CardActions>
+            {/* push to api button */}
             <Button
               variant="raised"
               color="primary"
               fullWidth={true}
               href={
-                "http://localhost:4001/perma/" + multi + "/mess/" + RedacChefWeb
+                "http://localhost:4001" +
+                "/datePar/" +
+                datePar +
+                "/perma/" +
+                perma +
+                "/general/" +
+                general +
+                "/redacChefWeb/" +
+                redacChefWeb +
+                "/urgence/" +
+                urgence +
+                "/informatique/" +
+                informatique
               }
             >
               push to api
