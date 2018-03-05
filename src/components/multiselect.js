@@ -18,6 +18,7 @@ import TextField from "material-ui/TextField";
 // import Autors from './auteurs_internes'
 import "react-select/dist/react-select.css";
 // import Autors from './auteurs_internes.json'
+import ButtonPost from "../components/ButtonPost"
 
 class Option extends Component {
   handleClick = event => {
@@ -361,6 +362,7 @@ class IntegrationReactSelect extends React.Component {
             >
               push to api
             </Button>
+            <ButtonPost val={this.state}></ButtonPost>
           </CardActions>
         </Card>
       </div>
