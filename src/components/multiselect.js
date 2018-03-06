@@ -24,7 +24,8 @@ import styles from "./MultiSelectStyle";
 
 class Option extends Component {
   handleClick = event => {
-    console.log('handleClick', this.props)
+    console.log('handleClick', this.props.option)
+    console.log('handleClick', event)
     this.props.onSelect(this.props.option, event);
   };
 
@@ -48,7 +49,8 @@ class Option extends Component {
 }
 
 function SelectWrapped(props) {
-  console.log("SelectWrapped props", props)
+  console.log("SelectWrapped props", props.value)
+  // this.props.value = "1sr"
   const { classes, ...other } = props;
 
   return (
@@ -61,6 +63,10 @@ function SelectWrapped(props) {
       clearRenderer={() => <ClearIcon />}
       valueComponent={valueProps => {
         const { value, children, onRemove } = valueProps;
+        console.log("valueComponent valueProps", value)
+        console.log("valueComponent value", value)
+        console.log("valueComponent children", children)
+        // console.log("valueComponent", value)
 
         const onDelete = event => {
           event.preventDefault();
@@ -105,6 +111,7 @@ class IntegrationReactSelect extends React.Component {
   };
 
   handleChangePerma = perma => {
+    console.log("handleChangePerma", perma)
     this.setState({
       perma
     });
@@ -191,7 +198,7 @@ class IntegrationReactSelect extends React.Component {
                 instanceId: "react-select-chip",
                 id: "react-select-chip",
                 name: "react-select-chip",
-                simpleValue: true,
+                simpleValue: false,
                 options: permanenciers
               }}
             />
