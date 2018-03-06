@@ -62,7 +62,7 @@ class App extends Component {
       </div>
     );
 
-    const About = () => (
+    const Editor = () => (
       <div>
         <Picker
           value={selectedSubreddit}
@@ -83,7 +83,7 @@ class App extends Component {
         <p>
           {lastUpdated && (
             <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{" "}
+              Derniere mise a jour le  {new Date(lastUpdated).toLocaleTimeString()}.{" "}
             </span>
           )}
           {!isFetching && (
@@ -99,19 +99,9 @@ class App extends Component {
         <SimpleAppBar />
         <Router>
           <div>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-            </ul>
-
-            <hr />
-
+            <Link to="/">clt</Link> <Link to="/edit">edit</Link>
             <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
+            <Route path="/edit" component={Editor} />
           </div>
         </Router>
         <Reboot />

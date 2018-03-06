@@ -51,7 +51,7 @@ class CircularIntegration extends React.Component {
   }
 
   handleButtonClick = (val) => {
-      console.log(this.state.valToStore)
+      // console.log(this.state.valToStore)
     if (!this.state.loading) {
       this.setState(
         {
